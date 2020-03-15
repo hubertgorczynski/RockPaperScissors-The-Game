@@ -74,12 +74,16 @@ public class RoundHandler {
     }
 
     private void setHumanMoves(String text) {
-        if (text.equals("1")) {
-            playerMove = "rock";
-        } else if (text.equals("2")) {
-            playerMove = "paper";
-        } else if (text.equals("3")) {
-            playerMove = "scissors";
+        switch (text) {
+            case "1":
+                playerMove = "rock";
+                break;
+            case "2":
+                playerMove = "paper";
+                break;
+            case "3":
+                playerMove = "scissors";
+                break;
         }
     }
 
@@ -93,27 +97,59 @@ public class RoundHandler {
     }
 
     private void setComputerMovesStandard() {
-        computerMove = Math.random() < 0.33 ? "paper" : (Math.random() >= 0.33 && Math.random() < 0.66
-                ? "scissors" : "rock");
+        if (Math.random() < 0.33) {
+            computerMove = "paper";
+        } else {
+            if (Math.random() >= 0.33 && Math.random() < 0.66) {
+                computerMove = "scissors";
+            } else {
+                computerMove = "rock";
+            }
+        }
     }
 
     private void setComputerMovesHarder() {
         if (playerMove.equals("rock")) {
-            computerMove = Math.random() <= 0.50 ? "paper" : (Math.random() < 0.25 && Math.random() < 0.25
-                    ? "scissors" : "rock");
-        } else if (playerMove.equals("paper")) {
-            computerMove = Math.random() <= 0.50 ? "scissors" : (Math.random() < 0.25 && Math.random() < 0.25
-                    ? "paper" : "rock");
-        } else if (playerMove.equals("scissors")) {
-            computerMove = Math.random() <= 0.50 ? "rock" : (Math.random() < 0.25 && Math.random() < 0.25
-                    ? "scissors" : "scissors");
+            if (Math.random() <= 0.50) {
+                computerMove = "paper";
+            } else {
+                if (Math.random() < 0.25) {
+                    computerMove = "scissors";
+                } else {
+                    computerMove = "rock";
+                }
+            }
+        }
+
+        if (playerMove.equals("paper")) {
+            if (Math.random() <= 0.50) {
+                computerMove = "scissors";
+            } else {
+                if (Math.random() < 0.25) {
+                    computerMove = "rock";
+                } else {
+                    computerMove = "paper";
+                }
+            }
+        }
+
+        if (playerMove.equals("scissors")) {
+            if (Math.random() <= 0.50) {
+                computerMove = "rock";
+            } else {
+                if (Math.random() < 0.25) {
+                    computerMove = "paper";
+                } else {
+                    computerMove = "scissors";
+                }
+            }
         }
     }
 
     public void displayFinalScores(String playerName) {
         System.out.println("\n|Final scoreboard|" + "\n " + playerName + " wins: " + numberOfHumanVictories +
                 "\n Computer wins: " + numberOfComputerVictories + "\n Number of ties: " + numberOfTies +
-                "\n Rounds passed: " + rounds);
+                "\n Rounds passed: " + (rounds - 1));
     }
 
     private void displayActualScores(String playerName) {
