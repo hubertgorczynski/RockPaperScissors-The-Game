@@ -1,41 +1,32 @@
-package rps;
+package RockPaperScissors;
 
 import java.util.Scanner;
 
 public class RoundHandler {
-    int rounds = 1;
-    int numberOfHumanVictories = 0;
-    int numberOfComputerVictories = 0;
-    int numberOfTies = 0;
-    String playerMove;
-    String computerMove;
+    private String playerMove;
+    private String computerMove;
+    Conditions stateOfGame;
 
-    public void play(String playerName, int roundsToWin, String difficultyChose) {
-        while ((numberOfHumanVictories < roundsToWin) && (numberOfComputerVictories < roundsToWin)) {
-            String whatToDo;
-            Scanner scan = new Scanner(System.in);
-            GameHandler gameHandler = new GameHandler();
+    public Conditions play(String difficultyChose) {
+        Scanner scan = new Scanner(System.in);
+        String whatToDo = askForPlayerMove();
 
-            whatToDo = askForPlayerMove();
-
-            if (whatToDo.equals("x")) {
-                System.out.println(Statements.areYouSureExit);
-                if (scan.next().equals("x")) {
-                    displayFinalScores(playerName);
-                }
+        if (whatToDo.equals("x")) {
+            System.out.println(Statements.areYouSureExit);
+            if (scan.next().equals("x")) {
+                return Conditions.EXIT_GAME;
             }
-
-            if (whatToDo.equals("n")) {
-                System.out.println(Statements.areYouSureNewGame);
-                if (scan.next().equals("n")) {
-                    gameHandler.start();
-                }
+        } else if (whatToDo.equals("n")) {
+            System.out.println(Statements.areYouSureNewGame);
+            if (scan.next().equals("n")) {
+                return Conditions.NEW_GAME;
             }
-
+        } else {
             setHumanMoves(whatToDo);
-            setDifficultyLevel(difficultyChose);
-            compareMoves(playerName, roundsToWin, difficultyChose);
+            setDifficultyLevel(difficultyChose); // set computer moves
+            return stateOfGame = compareMoves();
         }
+        return Conditions.INVALID_KEY;
     }
 
     private String askForPlayerMove() {
@@ -51,26 +42,31 @@ public class RoundHandler {
         return playerChoice;
     }
 
-    private void compareMoves(String playerName, int roundsToWin, String difficultyChose) {
-        System.out.println("\n|Round: " + rounds + "|");
-        System.out.println(playerName + " choose: " + playerMove + "\nComputer choose: " + computerMove);
+    private void setDifficultyLevel(String difficultyChose) {
+        if (difficultyChose.equals("s")) {
+            setComputerMovesStandard();
+        }
+        if (difficultyChose.equals("h")) {
+            setComputerMovesHarder();
+        }
+    }
+
+    private Conditions compareMoves() {
+        System.out.println("You choose: " + playerMove + " vs Computer choose: " + computerMove);
         if (playerMove.equals("rock") && computerMove.equals("scissors")
                 || playerMove.equals("paper") && computerMove.equals("rock")
                 || playerMove.equals("scissors") && computerMove.equals("paper")) {
-            System.out.println(playerName + " wins!");
-            numberOfHumanVictories++;
+            System.out.println("Player wins!");
+            return Conditions.HUMAN_WIN;
         } else if (playerMove.equals("rock") && computerMove.equals("paper")
                 || playerMove.equals("paper") && computerMove.equals("scissors")
                 || playerMove.equals("scissors") && computerMove.equals("rock")) {
             System.out.println("Computer wins!");
-            numberOfComputerVictories++;
-        } else if (playerMove.equals(computerMove)) {
+            return Conditions.COMPUTER_WIN;
+        } else {
             System.out.println("We have a tie!");
-            numberOfTies++;
+            return Conditions.TIE;
         }
-        rounds++;
-        displayActualScores(playerName);
-        play(playerName, roundsToWin, difficultyChose);
     }
 
     private void setHumanMoves(String text) {
@@ -84,15 +80,6 @@ public class RoundHandler {
             case "3":
                 playerMove = "scissors";
                 break;
-        }
-    }
-
-    public void setDifficultyLevel(String difficultyChose) {
-        if (difficultyChose.equals("s")) {
-            setComputerMovesStandard();
-        }
-        if (difficultyChose.equals("h")) {
-            setComputerMovesHarder();
         }
     }
 
@@ -145,15 +132,7 @@ public class RoundHandler {
             }
         }
     }
-
-    public void displayFinalScores(String playerName) {
-        System.out.println("\n|Final scoreboard|" + "\n " + playerName + " wins: " + numberOfHumanVictories +
-                "\n Computer wins: " + numberOfComputerVictories + "\n Number of ties: " + numberOfTies +
-                "\n Rounds passed: " + (rounds - 1));
-    }
-
-    private void displayActualScores(String playerName) {
-        System.out.println("\n|Actual scoreboard|" + "\n " + playerName + " wins: " + numberOfHumanVictories +
-                "\n Computer wins: " + numberOfComputerVictories);
-    }
 }
+
+
+

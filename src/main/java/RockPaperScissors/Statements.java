@@ -1,11 +1,11 @@
-package rps;
+package RockPaperScissors;
 
 public class Statements {
 
     private Statements() {
     }
 
-    public static final String rules = "\n|Key 1 - play \"rock\"|" + "\n|Key 2 - play \"paper\"|"
+    public static final String rules = "|Key 1 - play \"rock\"|" + "\n|Key 2 - play \"paper\"|"
             + "\n|Key 3 - play \"scissors\"|" + "\n|Exit (press \"x\" button)|"
             + "\n|Start new game (press \"n\" button)|";
 

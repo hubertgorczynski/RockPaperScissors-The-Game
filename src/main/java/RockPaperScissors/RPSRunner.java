@@ -1,4 +1,4 @@
-package rps;
+package RockPaperScissors;
 
 public class RPSRunner {
     public static void main(String[] args) {
