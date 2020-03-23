@@ -5,49 +5,53 @@ import java.util.Scanner;
 public class RoundHandler {
     private String playerMove;
     private String computerMove;
-    Conditions stateOfGame;
 
     public Conditions play(String difficultyChose) {
         Scanner scan = new Scanner(System.in);
         String whatToDo = askForPlayerMove();
 
         if (whatToDo.equals("x")) {
-            System.out.println(Statements.areYouSureExit);
+            System.out.println(Statements.ARE_YOU_SURE_EXIT);
             if (scan.next().equals("x")) {
                 return Conditions.EXIT_GAME;
             }
         } else if (whatToDo.equals("n")) {
-            System.out.println(Statements.areYouSureNewGame);
+            System.out.println(Statements.ARE_YOU_SURE_NEW_GAME);
             if (scan.next().equals("n")) {
                 return Conditions.NEW_GAME;
             }
         } else {
             setHumanMoves(whatToDo);
-            setDifficultyLevel(difficultyChose); // set computer moves
-            return stateOfGame = compareMoves();
+            setDifficultyLevel(difficultyChose);
+            return compareMoves();
         }
         return Conditions.INVALID_KEY;
     }
 
     private String askForPlayerMove() {
-        System.out.println(Statements.rules);
+        System.out.println(Statements.RULES);
         Scanner moveScanner = new Scanner(System.in);
         String playerChoice = moveScanner.next();
-        if (playerChoice.equals("1") || playerChoice.equals("2") || playerChoice.equals("3")
-                || playerChoice.equals("x") || playerChoice.equals("n")) {
-            return playerChoice;
+
+        while (!playerChoice.equals("1") && !playerChoice.equals("2") && !playerChoice.equals("3")
+                && !playerChoice.equals("x") && !playerChoice.equals("n")) {
+            System.out.println("Invalid key used. Please enter one from these keys: 1, 2, 3, n, x.");
+            playerChoice = moveScanner.next();
         }
-        System.out.println("Invalid key used. Please enter one from these keys: 1, 2, 3, n, x.");
-        askForPlayerMove();
         return playerChoice;
     }
 
     private void setDifficultyLevel(String difficultyChose) {
-        if (difficultyChose.equals("s")) {
-            setComputerMovesStandard();
-        }
-        if (difficultyChose.equals("h")) {
-            setComputerMovesHarder();
+        switch (difficultyChose) {
+            case "e":
+                setComputerMovesEasier();
+                break;
+            case "s":
+                setComputerMovesStandard();
+                break;
+            case "h":
+                setComputerMovesHarder();
+                break;
         }
     }
 
@@ -91,6 +95,44 @@ public class RoundHandler {
                 computerMove = "scissors";
             } else {
                 computerMove = "rock";
+            }
+        }
+    }
+
+    private void setComputerMovesEasier() {
+        if (playerMove.equals("rock")) {
+            if (Math.random() <= 0.50) {
+                computerMove = "scissors";
+            } else {
+                if (Math.random() < 0.25) {
+                    computerMove = "paper";
+                } else {
+                    computerMove = "rock";
+                }
+            }
+        }
+
+        if (playerMove.equals("paper")) {
+            if (Math.random() <= 0.50) {
+                computerMove = "rock";
+            } else {
+                if (Math.random() < 0.25) {
+                    computerMove = "scissors";
+                } else {
+                    computerMove = "paper";
+                }
+            }
+        }
+
+        if (playerMove.equals("scissors")) {
+            if (Math.random() <= 0.50) {
+                computerMove = "paper";
+            } else {
+                if (Math.random() < 0.25) {
+                    computerMove = "rock";
+                } else {
+                    computerMove = "scissors";
+                }
             }
         }
     }
